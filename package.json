@@ -1,6 +1,6 @@
 {
   "name": "@adhityan/gc-doc",
-  "version": "0.1.9",
+  "version": "0.2.3",
   "description": "GC documentation library",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,8 @@
   "dependencies": {
     "class-transformer": "^0.2.3",
     "class-validator": "^0.11.1",
+    "parent-module": "^2.0.0",
+    "read-pkg-up": "^7.0.1",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.1-alpha.2",
     "routing-controllers-openapi": "^1.8.0"
