@@ -1,11 +1,11 @@
-# GC-Logger
+# GC-Router
 
-Common logger with typescript support
+GC Logger that adds a documentation route automatically
 
 ### Installation
 
 
 #
 ```sh
-$ npm install @adhityan/gc-logger
+$ npm install @adhityan/gc-doc
 ```
