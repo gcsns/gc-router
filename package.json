@@ -1,6 +1,6 @@
 {
   "name": "@adhityan/gc-doc",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "GC documentation library",
   "main": "index.js",
   "scripts": {
@@ -25,7 +25,8 @@
     "read-pkg-up": "^7.0.1",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.1-alpha.2",
-    "routing-controllers-openapi": "^1.8.0"
+    "routing-controllers-openapi": "^1.8.0",
+    "swagger-ui-dist": "^3.25.0"
   },
   "peerDependencies": {
     "@adhityan/gc-logger": "^0.1.9"

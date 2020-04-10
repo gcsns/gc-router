@@ -15,7 +15,7 @@ export class Router {
 
     public static initialize(app: Express.Application, config: RoutingOptions, container: IocAdapter) {
         if(config.enableDocumentation) {
-            const documentationUrl = config.documentationPath??'/documentation';
+            const documentationUrl = '/openapi'; //not allowed to customize it because we want to load an external swagger for this
             Logger.debug(`Loading OpenAPI Spec at path: ${documentationUrl}`);
             const parent = parentModule();
 
@@ -23,7 +23,7 @@ export class Router {
                 Logger.info('Serving documentation on request');
                 const storage = getMetadataArgsStorage();
 
-                if(config.documentationParameters?.baseUrl && parent) {
+                if(parent && config.documentationParameters?.baseUrl) {
                     const parentJson = readPkgUp.sync({cwd: path.dirname(parent)})?.packageJson;
                     const version = parentJson?.version;
 

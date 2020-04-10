@@ -3,11 +3,10 @@ import { OpenAPIObject } from 'openapi3-ts';
 
 export type RoutingOptions = RoutingControllersOptions & ({ 
     enableDocumentation: true,
-    documentationPath?: string,
     documentationParameters?: Partial<OpenAPIObject> | {
-        title: string,
-        baseUrl: string,
-        description: string
+        baseUrl: string
+        title?: string,
+        description?: string
     }
 } | { 
     enableDocumentation?: false
