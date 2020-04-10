@@ -1,6 +1,6 @@
 {
   "name": "@adhityan/gc-doc",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "GC documentation library",
   "main": "index.js",
   "scripts": {

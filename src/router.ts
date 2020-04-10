@@ -48,6 +48,10 @@ export class Router {
                 }
                 
                 const spec = routingControllersToSpec(storage, config, config.documentationParameters);
+
+                res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+                res.setHeader('Access-Control-Allow-Methods', 'GET');
+                res.setHeader('Access-Control-Allow-Origin', '*');
                 res.json(spec);
             });
         }
