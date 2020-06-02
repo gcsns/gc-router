@@ -1,4 +1,4 @@
-import { RoutingControllersOptions } from "routing-controllers";
+import { RoutingControllersOptions } from 'routing-controllers';
 import { OpenAPIObject } from 'openapi3-ts';
 export declare type RoutingOptions = RoutingControllersOptions & ({
     enableDocumentation: true;
@@ -10,3 +10,9 @@ export declare type RoutingOptions = RoutingControllersOptions & ({
 } | {
     enableDocumentation?: false;
 });
+export declare type ResponseBase = {
+    requestId: string;
+};
+export interface ExpressError extends Error {
+    statusCode: number;
+}

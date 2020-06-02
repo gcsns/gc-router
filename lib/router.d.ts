@@ -6,4 +6,5 @@ export declare class Router {
     private static routerConfig;
     static initialize(app: Express.Application, config: RoutingOptions, container: IocAdapter): void;
     static getConfig(): RoutingOptions;
+    static prepareMungMiddleware(): Express.RequestHandler<import("express-serve-static-core").ParamsDictionary>;
 }
