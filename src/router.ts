@@ -5,14 +5,12 @@ import { getMetadataArgsStorage, useContainer, IocAdapter, useExpressServer } fr
 import { routingControllersToSpec } from 'routing-controllers-openapi';
 import { Logger } from '@adhityan/gc-logger';
 import Helmet from 'helmet';
-import Cors from 'cors';
 
 import path from 'path';
 import readPkgUp from 'read-pkg-up';
 import parentModule from 'parent-module';
-import mung from 'express-mung';
 
-import { parseMiddleware } from './middleware';
+import { ErrorFormatHandler, FormatInterceptor } from './middleware';
 import { RoutingOptions } from './types';
 
 export class Router {
@@ -64,11 +62,17 @@ export class Router {
             });
         }
 
-        app.use(mung.json(parseMiddleware));
-        if (container) useContainer(container);
-        useExpressServer(app, config);
+        if (config.middlewares) (<Function[]>config.middlewares).push(<Function>ErrorFormatHandler);
+        else config.middlewares = [<Function>ErrorFormatHandler];
 
+        if (config.interceptors) (<Function[]>config.interceptors).push(<Function>FormatInterceptor);
+        else config.interceptors = [<Function>FormatInterceptor];
+
+        config.defaultErrorHandler = false;
+        if (container) useContainer(container);
         Router.routerConfig = config;
+
+        useExpressServer(app, config);
     }
 
     public static getConfig(): RoutingOptions {

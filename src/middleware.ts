@@ -1,30 +1,44 @@
 import { Request as IRequest, Response as IResponse } from 'express';
 import { Express, Logger } from '@adhityan/gc-logger';
 import { ExpressError } from './types';
+import {
+    Interceptor,
+    InterceptorInterface,
+    Action,
+    Middleware,
+    ExpressErrorMiddlewareInterface
+} from 'routing-controllers';
 
-export const handleError = (error: Error, req: IRequest, res: IResponse) => {
-    if ((<any>error).errorIdentifier) delete (<any>error).errorIdentifier;
-    const status = (<ExpressError>error).httpCode || res.statusCode || 500;
-    Logger.error('Express error', error);
+@Middleware({ type: 'after' })
+export class ErrorFormatHandler implements ExpressErrorMiddlewareInterface {
+    error(error: any, request: Express.Request, response: Express.Response, next: () => any) {
+        if ((<any>error).errorIdentifier) delete (<any>error).errorIdentifier;
+        const status = (<ExpressError>error).httpCode || request.statusCode || 500;
+        Logger.error('[Express Error]', error);
 
-    const message = {
-        message: error.message || 'Something went wrong'
-    };
-
-    res.status(status);
-    return message;
-};
-
-export const parseMiddleware = (body: any, req: IRequest, res: IResponse) => {
-    if (body.constructor === Array) body = { data: body, requestId: (<Express.Request>req).requestId };
-    else if (typeof body === 'object' && body !== null) {
-        if (body.errorIdentifier === '!parseGeneratedError!') body = handleError(body, req, res);
-        body.requestId = (<Express.Request>req).requestId;
-    } else if (typeof body === 'string')
-        body = {
-            message: body,
-            requestId: (<Express.Request>req).requestId
+        const message = {
+            requestId: request.requestId,
+            message: error.message || 'Something is not right...',
+            errors: error.errors
         };
 
-    return body;
-};
+        response.status(status).send(message);
+        next();
+    }
+}
+
+@Interceptor()
+export class FormatInterceptor implements InterceptorInterface {
+    intercept(action: Action, body: any) {
+        if (body.constructor === Array) body = { data: body, requestId: (<Express.Request>action.request).requestId };
+        else if (typeof body === 'object' && body !== null)
+            body.requestId = (<Express.Request>action.request).requestId;
+        else if (typeof body === 'string')
+            body = {
+                message: body,
+                requestId: (<Express.Request>action.request).requestId
+            };
+
+        return body;
+    }
+}

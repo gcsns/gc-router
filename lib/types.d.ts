@@ -15,9 +15,8 @@ export declare class ResponseBase {
     constructor();
 }
 export declare class RequestBase {
-    requestId: string;
-    constructor();
 }
 export declare class ExpressError extends HttpError {
     constructor(statusCode?: number, message?: string);
+    toJSON(): this;
 }
