@@ -1,4 +1,4 @@
-import { RoutingControllersOptions } from 'routing-controllers';
+import { RoutingControllersOptions, HttpError } from 'routing-controllers';
 import { OpenAPIObject } from 'openapi3-ts';
 
 export type RoutingOptions = RoutingControllersOptions &
@@ -22,15 +22,21 @@ export class ResponseBase {
     requestId: string;
 
     constructor() {
+        this.requestId = '---';
+    }
+}
+
+export class RequestBase {
+    requestId: string;
+
+    constructor() {
         this.requestId = 'NI';
     }
 }
 
-export class ExpressError extends Error {
-    statusCode: number;
-
+export class ExpressError extends HttpError {
     constructor(statusCode?: number, message?: string) {
-        super(message);
-        this.statusCode = statusCode ?? 500;
+        statusCode = statusCode ?? 500;
+        super(statusCode, message);
     }
 }

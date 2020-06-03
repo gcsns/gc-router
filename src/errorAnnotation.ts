@@ -1,6 +1,6 @@
 import { ExpressError, ResponseBase } from './types';
 
-export function parseErrors(target: Function) {
+export const parseErrors = () => (target: Function) => {
     const functions = Object.getOwnPropertyNames(target.prototype).filter((x) => x !== 'constructor');
 
     for (const propertyName of functions) {
@@ -36,4 +36,4 @@ export function parseErrors(target: Function) {
             value: target.prototype[propertyName]
         };
     }
-}
+};

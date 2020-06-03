@@ -4,7 +4,7 @@ import { ExpressError } from './types';
 
 export const handleError = (error: Error, req: IRequest, res: IResponse) => {
     if ((<any>error).errorIdentifier) delete (<any>error).errorIdentifier;
-    const status = (<ExpressError>error).statusCode || res.statusCode || 500;
+    const status = (<ExpressError>error).httpCode || res.statusCode || 500;
     Logger.error('Express error', error);
 
     const message = {

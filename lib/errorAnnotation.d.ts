@@ -1,1 +1,1 @@
-export declare function parseErrors(target: Function): void;
+export declare const parseErrors: () => (target: Function) => void;

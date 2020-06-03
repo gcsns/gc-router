@@ -20,7 +20,6 @@ export class Router {
 
     public static initialize(app: Express.Application, config: RoutingOptions, container: IocAdapter) {
         app.use(Helmet());
-        app.use(Cors());
 
         if (config.enableDocumentation) {
             const documentationUrl = '/openapi'; //not allowed to customize it because we want to load an external swagger for this
@@ -55,6 +54,7 @@ export class Router {
                     }
                 }
 
+                config.cors = true;
                 const spec = routingControllersToSpec(storage, config, config.documentationParameters);
 
                 res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
