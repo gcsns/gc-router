@@ -1,4 +1,5 @@
-import { ErrorRequestHandler } from 'express';
-import { Express } from '@adhityan/gc-logger';
-export declare const errorMiddleware: () => ErrorRequestHandler<import("express-serve-static-core").ParamsDictionary>;
-export declare const parseMiddleware: () => (body: any, req: Express.Request, res: Express.Response) => any;
+import { Request as IRequest, Response as IResponse } from 'express';
+export declare const handleError: (error: Error, req: IRequest<import("express-serve-static-core").ParamsDictionary>, res: IResponse<any>) => {
+    message: string;
+};
+export declare const parseMiddleware: (body: any, req: IRequest<import("express-serve-static-core").ParamsDictionary>, res: IResponse<any>) => any;

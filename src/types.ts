@@ -18,10 +18,19 @@ export type RoutingOptions = RoutingControllersOptions &
           }
     );
 
-export type ResponseBase = {
+export class ResponseBase {
     requestId: string;
-};
 
-export interface ExpressError extends Error {
+    constructor() {
+        this.requestId = 'NI';
+    }
+}
+
+export class ExpressError extends Error {
     statusCode: number;
+
+    constructor(statusCode?: number, message?: string) {
+        super(message);
+        this.statusCode = statusCode ?? 500;
+    }
 }

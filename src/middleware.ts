@@ -1,32 +1,30 @@
-import { NextFunction, ErrorRequestHandler, Request as IRequest, Response as IResponse } from 'express';
-import { Express } from '@adhityan/gc-logger';
+import { Request as IRequest, Response as IResponse } from 'express';
+import { Express, Logger } from '@adhityan/gc-logger';
 import { ExpressError } from './types';
 
-export const errorMiddleware = (): ErrorRequestHandler => {
-    return (error: ExpressError, req: IRequest, res: IResponse, next: NextFunction) => {
-        const status = error.statusCode || res.statusCode || 500;
+export const handleError = (error: Error, req: IRequest, res: IResponse) => {
+    if ((<any>error).errorIdentifier) delete (<any>error).errorIdentifier;
+    const status = (<ExpressError>error).statusCode || res.statusCode || 500;
+    Logger.error('Express error', error);
 
-        const message = {
-            requestId: (<Express.Request>req).requestId,
-            message: error.message || 'Something went wrong'
-        };
-
-        res.status(status).send({
-            status,
-            message
-        });
+    const message = {
+        message: error.message || 'Something went wrong'
     };
+
+    res.status(status);
+    return message;
 };
 
-export const parseMiddleware = () => {
-    return (body: any, req: Express.Request, res: Express.Response) => {
-        if (typeof body === 'object' && body !== null) body.requestId = req.requestId;
-        else if (typeof body === 'string')
-            body = {
-                message: body,
-                requestId: req.requestId
-            };
+export const parseMiddleware = (body: any, req: IRequest, res: IResponse) => {
+    if (body.constructor === Array) body = { data: body, requestId: (<Express.Request>req).requestId };
+    else if (typeof body === 'object' && body !== null) {
+        if (body.errorIdentifier === '!parseGeneratedError!') body = handleError(body, req, res);
+        body.requestId = (<Express.Request>req).requestId;
+    } else if (typeof body === 'string')
+        body = {
+            message: body,
+            requestId: (<Express.Request>req).requestId
+        };
 
-        return body;
-    };
+    return body;
 };

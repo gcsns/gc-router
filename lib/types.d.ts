@@ -10,9 +10,11 @@ export declare type RoutingOptions = RoutingControllersOptions & ({
 } | {
     enableDocumentation?: false;
 });
-export declare type ResponseBase = {
+export declare class ResponseBase {
     requestId: string;
-};
-export interface ExpressError extends Error {
+    constructor();
+}
+export declare class ExpressError extends Error {
     statusCode: number;
+    constructor(statusCode?: number, message?: string);
 }

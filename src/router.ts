@@ -12,7 +12,7 @@ import readPkgUp from 'read-pkg-up';
 import parentModule from 'parent-module';
 import mung from 'express-mung';
 
-import { errorMiddleware, parseMiddleware } from './middleware';
+import { parseMiddleware } from './middleware';
 import { RoutingOptions } from './types';
 
 export class Router {
@@ -64,20 +64,14 @@ export class Router {
             });
         }
 
+        app.use(mung.json(parseMiddleware));
         if (container) useContainer(container);
         useExpressServer(app, config);
-
-        app.use(this.prepareMungMiddleware());
-        app.use(errorMiddleware());
 
         Router.routerConfig = config;
     }
 
     public static getConfig(): RoutingOptions {
         return Router.routerConfig;
-    }
-
-    public static prepareMungMiddleware() {
-        return mung.json(parseMiddleware);
     }
 }
