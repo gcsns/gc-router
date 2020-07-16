@@ -1,6 +1,6 @@
 import { RoutingControllersOptions, HttpError } from 'routing-controllers';
 import { OpenAPIObject } from 'openapi3-ts';
-import util from 'util';
+import { IsString } from 'class-validator';
 
 export type RoutingOptions = RoutingControllersOptions &
     (
@@ -20,6 +20,7 @@ export type RoutingOptions = RoutingControllersOptions &
     );
 
 export class ResponseBase {
+    @IsString()
     requestId: string;
 
     constructor() {

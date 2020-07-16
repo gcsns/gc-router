@@ -2,7 +2,9 @@ import 'reflect-metadata';
 
 import Express from 'express';
 import { getMetadataArgsStorage, useContainer, IocAdapter, useExpressServer } from 'routing-controllers';
+import { validationMetadatasToSchemas } from 'class-validator-jsonschema'
 import { routingControllersToSpec } from 'routing-controllers-openapi';
+
 import { Logger } from '@adhityan/gc-logger';
 import Helmet from 'helmet';
 
@@ -37,7 +39,7 @@ export class Router {
                         const description = config.documentationParameters.description ?? parentJson?.description;
                         const title = config.documentationParameters.title ?? parentJson?.name;
 
-                        config.documentationParameters = {
+                        config.documentationParameters = config.documentationParameters && {
                             info: {
                                 title,
                                 version
@@ -45,15 +47,21 @@ export class Router {
                             servers: [
                                 {
                                     url: `${config.documentationParameters.baseUrl}/v${version}`,
-                                    description: description
+                                    description
                                 }
-                            ]
+                            ],
                         };
                     }
                 }
 
+                const schemas = validationMetadatasToSchemas({
+                    refPointerPrefix: '#/components/schemas/'
+                });
+
                 config.cors = true;
-                const spec = routingControllersToSpec(storage, config, config.documentationParameters);
+                const spec = routingControllersToSpec(storage, config, config.documentationParameters && {
+                    components: { schemas }
+                });
 
                 res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
                 res.setHeader('Access-Control-Allow-Methods', 'GET');
