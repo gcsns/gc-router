@@ -23,13 +23,9 @@ export class Router {
         app.use(Helmet());
 
         const corsConfig = config.cors;
-        delete config.cors;
-
         if(corsConfig !== undefined && corsConfig !== false) {
-            Logger.debug('Enabling cors with config', corsConfig);
-
-            if(config.cors === true) {  app.use(cors()); }
-            else {  app.use(cors(config.cors)); }
+            if(corsConfig === true) Logger.debug('Enabling cors with default config');
+            else Logger.debug('Enabling cors with config', corsConfig);
         }
 
         if (config.enableDocumentation) {
