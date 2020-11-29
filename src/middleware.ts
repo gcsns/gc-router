@@ -30,6 +30,8 @@ export class ErrorFormatHandler implements ExpressErrorMiddlewareInterface {
 @Interceptor()
 export class FormatInterceptor implements InterceptorInterface {
     intercept(action: Action, body: any) {
+        if(!body) return;
+        
         if (body.constructor === Array) body = { data: body, requestId: (<Express.Request>action.request).requestId };
         else if (typeof body === 'object' && body !== null)
             body.requestId = (<Express.Request>action.request).requestId;

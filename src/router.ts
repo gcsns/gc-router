@@ -7,6 +7,7 @@ import { routingControllersToSpec } from 'routing-controllers-openapi';
 
 import { Logger } from '@adhityan/gc-logger';
 import Helmet from 'helmet';
+import cors from 'cors';
 
 import path from 'path';
 import readPkgUp from 'read-pkg-up';
@@ -20,6 +21,16 @@ export class Router {
 
     public static initialize(app: Express.Application, config: RoutingOptions, container: IocAdapter) {
         app.use(Helmet());
+
+        const corsConfig = config.cors;
+        delete config.cors;
+
+        if(corsConfig !== undefined && corsConfig !== false) {
+            Logger.debug('Enabling cors with config', corsConfig);
+
+            if(config.cors === true) {  app.use(cors()); }
+            else {  app.use(cors(config.cors)); }
+        }
 
         if (config.enableDocumentation) {
             const documentationUrl = '/openapi'; //not allowed to customize it because we want to load an external swagger for this
@@ -51,6 +62,8 @@ export class Router {
                                 }
                             ],
                         };
+
+                        // config.documentationParameters.
                     }
                 }
 
@@ -58,7 +71,6 @@ export class Router {
                     refPointerPrefix: '#/components/schemas/'
                 });
 
-                config.cors = true;
                 const spec = routingControllersToSpec(storage, config, config.documentationParameters && {
                     components: { schemas }
                 });
@@ -81,6 +93,7 @@ export class Router {
         Router.routerConfig = config;
 
         useExpressServer(app, config);
+        Logger.debug('Router loaded');
     }
 
     public static getConfig(): RoutingOptions {
