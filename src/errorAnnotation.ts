@@ -1,4 +1,4 @@
-import { ExpressError, ResponseBase } from './types';
+import { ProcessingError, ResponseBase } from './types';
 
 export const parseErrors = () => (target: Function) => {
     const functions = Object.getOwnPropertyNames(target.prototype).filter((x) => x !== 'constructor');
@@ -17,7 +17,7 @@ export const parseErrors = () => (target: Function) => {
                 return result;
             } catch (e) {
                 e.errorIdentifier = '!parseGeneratedError!';
-                return <ExpressError>e;
+                return <ProcessingError>e;
             }
         };
 

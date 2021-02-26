@@ -1,22 +1,19 @@
-import { RoutingControllersOptions, HttpError } from 'routing-controllers';
+import { RoutingControllersOptions } from 'routing-controllers';
 import { OpenAPIObject } from 'openapi3-ts';
 export declare type RoutingOptions = RoutingControllersOptions & ({
     enableDocumentation: true;
-    documentationParameters?: Partial<OpenAPIObject> | {
+    documentationParameters: Partial<OpenAPIObject> & {
+        title: string;
         baseUrl: string;
-        title?: string;
         description?: string;
     };
 } | {
-    enableDocumentation?: false;
+    enableDocumentation: false;
 });
 export declare class ResponseBase {
-    requestId: string;
-    constructor();
 }
 export declare class RequestBase {
 }
-export declare class ExpressError extends HttpError {
-    constructor(statusCode?: number, message?: string);
+export declare class ProcessingError extends Error {
     toJSON(): this;
 }

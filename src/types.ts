@@ -1,41 +1,25 @@
 import { RoutingControllersOptions, HttpError } from 'routing-controllers';
 import { OpenAPIObject } from 'openapi3-ts';
-import { IsString } from 'class-validator';
 
 export type RoutingOptions = RoutingControllersOptions &
     (
-        | {
+        {
               enableDocumentation: true;
-              documentationParameters?:
-                  | Partial<OpenAPIObject>
-                  | {
-                        baseUrl: string;
-                        title?: string;
-                        description?: string;
-                    };
-          }
-        | {
-              enableDocumentation?: false;
-          }
+              documentationParameters: Partial<OpenAPIObject> & {
+                  title: string;
+                  baseUrl: string;
+                  description?: string;
+              };
+        } | {
+              enableDocumentation: false;
+        }
     );
 
-export class ResponseBase {
-    @IsString()
-    requestId: string;
-
-    constructor() {
-        this.requestId = '---';
-    }
-}
+export class ResponseBase {}
 
 export class RequestBase {}
 
-export class ExpressError extends HttpError {
-    constructor(statusCode?: number, message?: string) {
-        statusCode = statusCode ?? 500;
-        super(statusCode, message);
-    }
-
+export class ProcessingError extends Error {
     toJSON() {
         return this;
     }
