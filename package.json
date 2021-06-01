@@ -1,6 +1,6 @@
 {
     "name": "@adhityan/gc-doc",
-    "version": "2.3.0",
+    "version": "2.5.1",
     "description": "GC Router library",
     "main": "./lib/index.js",
     "types": "./lib/index.d.ts",
