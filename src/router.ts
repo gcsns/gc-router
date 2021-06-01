@@ -4,7 +4,6 @@ import Express from 'express';
 import { getMetadataArgsStorage, useContainer, IocAdapter, useExpressServer } from 'routing-controllers';
 import { validationMetadatasToSchemas } from 'class-validator-jsonschema';
 import { routingControllersToSpec } from 'routing-controllers-openapi';
-import { defaultMetadataStorage } from 'class-transformer/storage';
 
 import { Logger } from '@adhityan/gc-logger';
 import Helmet from 'helmet';
@@ -34,8 +33,7 @@ export class Router {
                 const storage = getMetadataArgsStorage();
 
                 const schemas = validationMetadatasToSchemas({
-                    refPointerPrefix: '#/components/schemas/',
-                    classTransformerMetadataStorage: defaultMetadataStorage
+                    refPointerPrefix: '#/components/schemas/'
                 });
 
                 const spec = routingControllersToSpec(
